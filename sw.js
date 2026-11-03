@@ -1,6 +1,6 @@
 // Rolex Live · classical and JB edition
 'use strict';
-const CACHE='rolex-live-dual-jb-v4';
+const CACHE='rolex-live-dual-jb-v5';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./assets/rolex.png','./assets/jb.webp','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png','./icons/apple-touch-icon.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([
