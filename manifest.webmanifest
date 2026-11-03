@@ -1,0 +1,33 @@
+{
+  "id": "/pwa-rolex-submariner-orologio-live-gs-2026",
+  "name": "Rolex Live — Orologio Submariner",
+  "short_name": "Rolex Live",
+  "description": "Orologio Rolex animato con data e sincronizzazione Internet, disponibile anche offline.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090a0f",
+  "theme_color": "#090a0f",
+  "lang": "it",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ]
+}

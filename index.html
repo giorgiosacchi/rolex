@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="it"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#090a0f"/>
+<meta name="application-name" content="Rolex Live"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Rolex Live"/>
+<link rel="manifest" href="./manifest.webmanifest"/>
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"/>
+<title>Rolex Live — Orologio sincronizzato</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#090a0f;color:#eef0f4}
+body{min-height:100svh;min-height:100dvh;display:flex;align-items:center;flex-direction:column;justify-content:space-between;overflow-x:hidden}
+header{padding:18px 12px 5px;text-align:center;flex-shrink:0}header h1{font-size:13px;font-weight:650;letter-spacing:.22em;margin:0;color:#f0f0f4}
+header .subtitle{margin-top:6px;color:#9b9da7;font-size:11px;letter-spacing:.07em}
+main{display:flex;justify-content:center;align-items:center;flex:1;min-height:0;width:100%;overflow:hidden}
+.watch{position:relative;width:min(94vw,47dvh,545px);aspect-ratio:545 / 825;isolation:isolate;user-select:none;-webkit-user-select:none;flex-shrink:0}
+.watch img,.watch svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.watch img{object-fit:fill}.watch svg{overflow:visible}
+footer{text-align:center;width:100%;padding:5px 12px max(14px,env(safe-area-inset-bottom));flex-shrink:0}
+.digital{font-variant-numeric:tabular-nums;font-feature-settings:'tnum';font-size:clamp(18px,4vw,25px);letter-spacing:.09em;font-weight:500}
+.date-text{font-size:12px;color:#9c9fa9;margin:4px 0 10px}
+.status{display:flex;justify-content:center;align-items:center;gap:6px;color:#b8bbc5;font-size:11px;min-height:18px}
+.dot{width:7px;height:7px;border-radius:50%;background:#c28b3f;display:inline-block}.dot.ok{background:#68bd85}
+.actions{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+[hidden]{display:none!important}
+button,select{background:#1b1d26;border:1px solid #363947;color:#eceef2;border-radius:20px;font:inherit;font-size:12px;padding:8px 13px;cursor:pointer}
+button:active{transform:scale(.98)}button:disabled{opacity:.45;cursor:wait}
+select{max-width:185px}
+@media(max-height:680px){header{padding-top:8px}header .subtitle{display:none}.date-text{margin-bottom:3px}.actions{margin-top:5px}footer{padding-bottom:8px}.watch{width:min(89vw,45dvh,545px)}}
+@media(prefers-reduced-motion:reduce){button:active{transform:none}}
+</style></head><body>
+<header><h1>SUBMARINER · LIVE</h1><div class="subtitle">Quadrante animato • Data automatica</div></header>
+<main><div class="watch" aria-label="Orologio analogico Rolex Submariner funzionante">
+<img alt="Rolex Submariner con cinturino in acciaio, senza piedistallo" src="./assets/rolex.png" />
+<svg viewBox="355 60 545 825" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialGradient id="dial"><stop offset="0" stop-color="#0b0d12"/><stop offset=".7" stop-color="#08090e"/><stop offset="1" stop-color="#05060a"/></radialGradient>
+<linearGradient id="steel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#656c7b"/><stop offset=".28" stop-color="#f1f1f4"/><stop offset=".58" stop-color="#bec1cc"/><stop offset=".83" stop-color="#4f5665"/><stop offset="1" stop-color="#dde0e6"/></linearGradient>
+<linearGradient id="lume"><stop stop-color="#fff"/><stop offset="1" stop-color="#d3d5da"/></linearGradient>
+<linearGradient id="dateLens" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#747581"/><stop offset=".13" stop-color="#e9ebee"/><stop offset=".77" stop-color="#fff"/><stop offset="1" stop-color="#a6a9b2"/></linearGradient>
+<filter id="shadow"><feDropShadow dx="0" dy="1.4" stdDeviation="1.1" flood-color="#000" flood-opacity=".8"/></filter>
+</defs>
+<!-- Quadrante nuovo sopra le lancette ferme della fotografia -->
+<circle cx="618" cy="470" r="147" fill="url(#dial)"/>
+<circle cx="618" cy="470" r="147" fill="none" stroke="#5e6270" stroke-width=".6" opacity=".68"/>
+<g id="ticks"></g><g id="markers"></g>
+<!-- Corona e diciture -->
+<g fill="#ccd0dc" stroke="#ccd0dc" stroke-width=".6" opacity=".89">
+<path d="M611 402 L608 388 L615 394 L618 383 L621 394 L628 388 L625 402 Z" fill="none"/>
+<circle cx="608" cy="387" r="1.3"/><circle cx="618" cy="382" r="1.3"/><circle cx="628" cy="387" r="1.3"/>
+<path d="M611 404 L625 404"/>
+</g>
+<text x="618" y="426" text-anchor="middle" font-family="Georgia,Times New Roman,serif" font-weight="bold" font-size="19" letter-spacing=".4" fill="#d7d9e3">ROLEX</text>
+<text x="618" y="436" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" letter-spacing=".7" fill="#d5d6de">OYSTER PERPETUAL DATE</text>
+<g fill="#d0d2dd" text-anchor="middle" font-family="Arial,sans-serif" letter-spacing=".2">
+ <text x="618" y="519" font-size="11">SUBMARINER</text>
+ <text x="618" y="529" font-size="8">1000 ft = 300 m</text>
+ <text x="618" y="540" font-size="7.1">SUPERLATIVE CHRONOMETER</text>
+ <text x="618" y="549" font-size="7.1">OFFICIALLY CERTIFIED</text>
+ <text x="618" y="605" font-size="6.5">SWISS MADE</text>
+</g>
+<!-- Lente della data -->
+<g filter="url(#shadow)">
+<rect x="680" y="442" width="76" height="57" rx="19" fill="#111318" stroke="#626976" stroke-width="3"/>
+<rect x="688" y="450" width="59" height="40" rx="7" fill="url(#dateLens)" stroke="#b6b8c1" stroke-width="1.8"/>
+<text id="dayNumber" x="717.5" y="482" fill="#15151a" font-family="Arial,sans-serif" font-size="33" text-anchor="middle" font-weight="500">28</text>
+</g>
+<!-- Ore: stile Mercedes -->
+<g id="hourHand" filter="url(#shadow)">
+<path d="M612.5 485 L612.5 423 L610 408 L618 392 L626 408 L623.5 423 L623.5 485Z" fill="url(#steel)" stroke="#a5aab7" stroke-width="1.1"/>
+<circle cx="618" cy="422" r="13.4" fill="url(#steel)" stroke="#eff0f4" stroke-width=".6"/>
+<circle cx="618" cy="422" r="9.4" fill="#e0e2e7" stroke="#6c7483" stroke-width=".8"/>
+<path d="M618 413 L618 429 M609.6 418 L626.4 426 M610 427 L626 418" fill="none" stroke="#747e90" stroke-width="1.7"/>
+</g>
+<!-- Minuti -->
+<g id="minuteHand" filter="url(#shadow)">
+<path d="M613 486 L612.2 451 L614 366 L618 354 L622 366 L623.8 451 L623 486Z" fill="url(#steel)" stroke="#9ca3b3" stroke-width="1.2"/>
+<path d="M617 450 L617 370 L619 370 L619 450 Z" fill="#e4e5eb" opacity=".96"/>
+</g>
+<!-- Secondi con contrappeso -->
+<g id="secondHand" filter="url(#shadow)">
+<path d="M618 525 L618 350" fill="none" stroke="#7f8897" stroke-width="3"/>
+<path d="M618 350 L618 459" stroke="#dce0e8" stroke-width="1.6"/>
+<circle cx="618" cy="390" r="5.5" fill="#d6d8e0" stroke="#6d7687" stroke-width="2.1"/>
+<circle cx="618" cy="525" r="4.3" fill="#d6d8df" stroke="#606a79" stroke-width="1.3"/>
+</g>
+<circle cx="618" cy="470" r="7" fill="url(#steel)" stroke="#525a6a" stroke-width="1.2"/>
+<circle cx="618" cy="470" r="2.1" fill="#a9b1bd"/>
+</svg>
+</div></main>
+<footer>
+<div class="digital" id="digital">--:--:--</div>
+<div class="date-text" id="fullDate">Ora italiana (Roma)</div>
+<div class="status" role="status"><span class="dot" id="dot"></span><span id="status">Ora del dispositivo • connessione in corso…</span></div>
+<div class="actions"><button id="syncBtn" type="button">↻ Sincronizza ora</button><button id="installBtn" type="button" hidden>Installa l’app</button><select id="zone" aria-label="Fuso orario"><option value="Europe/Rome">Italia · Roma</option><option value="local">Fuso del dispositivo</option><option value="UTC">UTC</option><option value="Europe/London">Londra</option><option value="America/New_York">New York</option><option value="Asia/Tokyo">Tokyo</option></select></div>
+</footer>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+let baseEpoch = Date.now(), basePerf = performance.now(), synced = false;
+const angleAt = (hour) => hour * 30;
+function currentEpoch(){return baseEpoch + (performance.now() - basePerf);}
+function zone(){return $('zone').value==='local' ? (Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Rome') : $('zone').value;}
+function svgNode(name,attrs,parent){const el=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));parent.appendChild(el);return el;}
+for(let i=0;i<60;i++){
+ const angle=i*6, major=i%5===0;
+ svgNode('line',{x1:618,y1:470-(major?141:142),x2:618,y2:470-(major?146:145),stroke:major?'#b9bdc6':'#818591','stroke-width':major?1.4:.75,opacity:major?.94:.8,transform:`rotate(${angle} 618 470)`},$('ticks'));
+}
+for(let h=1;h<=11;h++){
+ if(h===3||h===6||h===9)continue;
+ const r=115,a=h*Math.PI/6,x=618+Math.sin(a)*r,y=470-Math.cos(a)*r;
+ svgNode('circle',{cx:x,cy:y,r:10.8,fill:'url(#steel)',stroke:'#393c45','stroke-width':1.2},$('markers'));
+ svgNode('circle',{cx:x,cy:y,r:7.9,fill:'url(#lume)',stroke:'#828893','stroke-width':.7},$('markers'));
+}
+svgNode('path',{d:'M618 343 L600 378 L636 378 Z',fill:'url(#steel)',stroke:'#4a4b57','stroke-width':1.3},$('markers'));
+svgNode('path',{d:'M618 349 L606 375 L630 375 Z',fill:'url(#lume)'},$('markers'));
+for(const [x,y,w,h] of [[488,464,35,12],[611,574,14,35]]){
+ svgNode('rect',{x,y,width:w,height:h,rx:2,fill:'url(#steel)',stroke:'#3e4651','stroke-width':1.1},$('markers'));
+ svgNode('rect',{x:x+2.7,y:y+2.3,width:w-5.4,height:h-4.6,rx:1,fill:'url(#lume)'},$('markers'));
+}
+
+function frame(){
+ const epoch=currentEpoch(), date=new Date(epoch), tz=zone();
+ const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',second:'2-digit',day:'2-digit',hourCycle:'h23'}).formatToParts(date).filter(p=>p.type!=='literal').map(p=>[p.type,Number(p.value)]));
+ const ms=((epoch%1000)+1000)%1000;
+ const hours=(parts.hour%12)+parts.minute/60+(parts.second+ms/1000)/3600;
+ const mins=parts.minute+(parts.second+ms/1000)/60;
+ const secs=parts.second+ms/1000;
+ $('hourHand').setAttribute('transform',`rotate(${hours*30} 618 470)`);
+ $('minuteHand').setAttribute('transform',`rotate(${mins*6} 618 470)`);
+ $('secondHand').setAttribute('transform',`rotate(${secs*6} 618 470)`);
+ $('dayNumber').textContent=parts.day;
+ $('digital').textContent=`${String(parts.hour).padStart(2,'0')}:${String(parts.minute).padStart(2,'0')}:${String(parts.second).padStart(2,'0')}`;
+ if(!window.lastDayText || window.lastDayText!==`${parts.day}-${parts.hour}-${tz}`){
+  $('fullDate').textContent=new Intl.DateTimeFormat('it-IT',{timeZone:tz,weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(date);
+  window.lastDayText=`${parts.day}-${parts.hour}-${tz}`;
+ }
+
+}
+function status(message,ok){$('status').textContent=message;$('dot').classList.toggle('ok',ok);}
+async function fetchWithTimeout(url){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),6500);try{
+ const start=performance.now();const res=await fetch(url,{signal:controller.signal,cache:'no-store'});const end=performance.now();
+ if(!res.ok)throw Error(`HTTP ${res.status}`);
+ return {data:await res.json(), midpoint:(start+end)/2};
+}finally{clearTimeout(timeout);}}
+async function synchronize(){
+ const btn=$('syncBtn');btn.disabled=true;status('Sincronizzazione con Internet…',false);
+ const providers=[
+  {url:'https://timeapi.io/api/Time/current/zone?timeZone=UTC',parse:d=>Date.UTC(d.year,d.month-1,d.day,d.hour,d.minute,d.seconds||0,d.milliSeconds||0)},
+  {url:'https://worldtime.timezone.io/api/timezone/Etc/UTC',parse:d=>Date.parse(d.utc_datetime||d.datetime)}
+ ];
+ let err=null;
+ for(const p of providers){try{
+  const {data,midpoint}=await fetchWithTimeout(p.url);
+  const epoch=p.parse(data);if(!Number.isFinite(epoch))throw Error('Data non valida');
+  baseEpoch=epoch;basePerf=midpoint;synced=true;
+  status('Sincronizzato con ora Internet',true);btn.disabled=false;return;
+ }catch(e){err=e;}}
+ // For offline use, fall back to device system clock.
+ if(!synced){baseEpoch=Date.now();basePerf=performance.now();}
+ status(synced?'Rete assente · mantiene ultima sincronizzazione':'Rete non disponibile · ora del dispositivo',false);btn.disabled=false;
+}
+$('syncBtn').addEventListener('click',synchronize);
+$('zone').addEventListener('change',()=>{window.lastDayText='';status(synced?'Sincronizzato con ora Internet':'Ora del dispositivo',synced);});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden && navigator.onLine) synchronize();});
+window.addEventListener('online',synchronize);
+frame();setInterval(frame,50);synchronize();
+setInterval(()=>{if(navigator.onLine)synchronize();},30*60*1000);
+
+// PWA: unique manifest identity, independently installable from other projects.
+let pendingInstall = null;
+const installBtn=$('installBtn');
+window.addEventListener('beforeinstallprompt', event => {
+ event.preventDefault();
+ pendingInstall=event;
+ installBtn.hidden=false;
+});
+installBtn.addEventListener('click', async () => {
+ if(!pendingInstall) return;
+ const event=pendingInstall;
+ pendingInstall=null;
+ installBtn.hidden=true;
+ try { await event.prompt(); await event.userChoice; } catch(err) { console.warn('Installazione annullata',err); }
+});
+window.addEventListener('appinstalled',()=>{pendingInstall=null; installBtn.hidden=true;});
+if ('serviceWorker' in navigator && ['http:', 'https:'].includes(location.protocol)) {
+ window.addEventListener('load',()=>{
+  navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(err=>console.warn('Cache offline non disponibile:',err));
+ });
+}
+</script></body></html>
