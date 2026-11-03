@@ -1,10 +1,21 @@
-/* Rolex Live PWA - offline shell v2 */
+// Rolex Live · classical and JB edition
 'use strict';
-const CACHE='rolex-live-offline-v2';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./assets/rolex.png','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png','./icons/apple-touch-icon.png'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()))});
-self.addEventListener('activate',e=>{e.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('rolex-live-offline-')&&k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()]))});
-self.addEventListener('fetch',e=>{const req=e.request;if(req.method!=='GET'||new URL(req.url).origin!==self.location.origin)return;
-if(req.mode==='navigate'){e.respondWith(fetch(req).then(r=>{if(r.ok){const clone=r.clone();e.waitUntil(caches.open(CACHE).then(c=>c.put(req,clone)))}return r}).catch(()=>caches.match(req).then(hit=>hit||caches.match('./index.html'))));return}
-e.respondWith(caches.match(req).then(hit=>hit||fetch(req)))
+const CACHE='rolex-live-dual-jb-v1';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./assets/rolex.png','./assets/jb.webp','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png','./icons/apple-touch-icon.png'];
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',event=>event.waitUntil(Promise.all([
+  caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('rolex-live-')&&key!==CACHE).map(key=>caches.delete(key)))),
+  self.clients.claim()
+])));
+self.addEventListener('fetch',event=>{
+ const request=event.request;
+ if(request.method!=='GET'||new URL(request.url).origin!==self.location.origin)return;
+ if(request.mode==='navigate'){
+  event.respondWith(fetch(request).then(response=>{
+    if(response.ok){const copy=response.clone();event.waitUntil(caches.open(CACHE).then(cache=>cache.put(request,copy)))}
+    return response;
+  }).catch(()=>caches.match(request).then(hit=>hit||caches.match('./index.html'))));
+  return;
+ }
+ event.respondWith(caches.match(request).then(hit=>hit||fetch(request)));
 });

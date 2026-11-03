@@ -32,9 +32,19 @@ button:active{transform:scale(.98)}button:disabled{opacity:.45;cursor:wait}
 select{max-width:185px}
 @media(max-height:680px){header{padding-top:8px}header .subtitle{display:none}.date-text{margin-bottom:3px}.actions{margin-top:5px}footer{padding-bottom:8px}.watch{width:min(89vw,45dvh,545px)}}
 @media(prefers-reduced-motion:reduce){button:active{transform:none}}
+
+/* Commutatore JB discreto, ma con area tattile adeguata */
+.title-line{display:flex;align-items:center;justify-content:center;gap:12px}
+.title-line h1{margin:0}
+.jb-toggle{font-size:11px;font-weight:700;letter-spacing:.08em;line-height:1;padding:8px 9px;min-width:34px;min-height:32px;border-radius:8px;border:1px solid #515361;background:#151820;color:#c2c4ca;transition:background .15s,border-color .15s,color .15s}
+.jb-toggle[aria-pressed="true"]{background:#624820;border-color:#c4a366;color:#ffe0a0}
+.jb-toggle:focus-visible{outline:2px solid #f9d59b;outline-offset:3px}
+.watch.jb{aspect-ratio:2 / 3}
+.watch.jb img{object-fit:fill}
+@media(max-height:680px){.title-line{gap:8px}.jb-toggle{min-height:29px}}
 </style></head><body>
-<header><h1>SUBMARINER · LIVE</h1><div class="subtitle">Quadrante animato • Data automatica</div></header>
-<main><div class="watch" aria-label="Orologio analogico Rolex Submariner funzionante">
+<header><div class="title-line"><h1>SUBMARINER · LIVE</h1><button id="jbToggle" class="jb-toggle" type="button" aria-pressed="false" aria-label="Attiva o disattiva quadrante James Bond" title="Alterna tra Rolex classico e James Bond">JB</button></div><div class="subtitle" id="subtitle">Quadrante animato • Data automatica</div></header>
+<main><div id="watchClassic" class="watch" aria-label="Orologio analogico Rolex Submariner funzionante">
 <img alt="Rolex Submariner con cinturino in acciaio, senza piedistallo" src="./assets/rolex.png" />
 <svg viewBox="355 60 545 825" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 <defs>
@@ -91,6 +101,63 @@ select{max-width:185px}
 <circle cx="618" cy="470" r="7" fill="url(#steel)" stroke="#525a6a" stroke-width="1.2"/>
 <circle cx="618" cy="470" r="2.1" fill="#a9b1bd"/>
 </svg>
+</div>
+<div id="watchJB" class="watch jb" hidden aria-label="Rolex Submariner James Bond con cinturino NATO e lancette animate">
+<img alt="Rolex Submariner James Bond con cinturino in tessuto rigato nero, oro e rosso" src="./assets/jb.webp"/>
+<svg viewBox="0 0 1024 1536" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<defs>
+ <radialGradient id="jbFace" cx="30%" cy="27%" r="85%">
+  <stop offset="0" stop-color="#132039"/><stop offset=".28" stop-color="#0a101e"/><stop offset=".6" stop-color="#05070c"/><stop offset="1" stop-color="#050507"/>
+ </radialGradient>
+ <radialGradient id="jbGlow" cx="16%" cy="36%" r="68%">
+  <stop stop-color="#40577a" stop-opacity=".20"/><stop offset=".55" stop-color="#0e1b30" stop-opacity=".06"/><stop offset="1" stop-color="#07080e" stop-opacity="0"/>
+ </radialGradient>
+ <linearGradient id="jbGold" x1="0" y1="0" x2=".9" y2="1">
+  <stop stop-color="#8a6634"/><stop offset=".25" stop-color="#f7d890"/><stop offset=".55" stop-color="#b1874a"/><stop offset=".78" stop-color="#f9dda0"/><stop offset="1" stop-color="#7b5a2d"/>
+ </linearGradient>
+ <radialGradient id="jbLume"><stop stop-color="#f6ecc9"/><stop offset=".8" stop-color="#e6d4a3"/><stop offset="1" stop-color="#c4a46b"/></radialGradient>
+ <filter id="jbShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1.2" dy="1.8" stdDeviation="2.3" flood-color="#000" flood-opacity=".8"/></filter>
+</defs>
+<!-- Tutto il cinturino e la cassa sono nella fotografia; sostituiamo soltanto il quadrante con una base priva di lancette statiche. -->
+<circle cx="502" cy="703" r="267" fill="url(#jbFace)"/>
+<circle cx="502" cy="703" r="267" fill="url(#jbGlow)"/>
+<circle cx="502" cy="703" r="262.5" fill="none" stroke="#ad7d29" stroke-width="2" opacity=".85"/>
+<g id="jbTicks"></g><g id="jbMarkers"></g>
+<!-- Logo e diciture sul quadrante dorato -->
+<g fill="#e1ac34" text-anchor="middle">
+ <g transform="translate(502 566)" fill="none" stroke="#e3ad3d" stroke-width="3" stroke-linejoin="round">
+  <path d="M-17 8 L-20 -20 L-8 -7 L0 -27 L8 -7 L20 -20 L17 8 Z"/>
+  <path d="M-18 13 H18"/>
+  <circle cx="-20" cy="-22" r="3" fill="#e3ad3d" stroke="none"/><circle cx="0" cy="-29" r="3" fill="#e3ad3d" stroke="none"/><circle cx="20" cy="-22" r="3" fill="#e3ad3d" stroke="none"/>
+ </g>
+ <text x="502" y="626" font-family="Georgia,'Times New Roman',serif" font-size="35" font-weight="600" letter-spacing="1.8">ROLEX</text>
+ <text x="502" y="647" font-family="Arial,sans-serif" font-size="16" letter-spacing="1.2">OYSTER PERPETUAL</text>
+ <text x="502" y="809" font-family="Georgia,'Times New Roman',serif" font-size="22" font-style="italic" letter-spacing="1">200 m = 660 ft</text>
+ <text x="502" y="838" font-family="Arial,sans-serif" font-size="22" font-weight="600" letter-spacing="1.1">SUBMARINER</text>
+ <text x="502" y="973" font-family="Arial,sans-serif" font-size="12" letter-spacing="1.6">SWISS</text>
+</g>
+<!-- Dorate, animate e calibrate sul centro del quadrante -->
+<g id="jbHourHand" filter="url(#jbShadow)">
+ <path d="M495 720 L493 628 L489 612 L490 576 L502 542 L514 576 L515 612 L511 628 L509 720 Z" fill="url(#jbGold)" stroke="#765325" stroke-width="2.3"/>
+ <path d="M498 671 L497 632 L502 620 L507 632 L506 671 Z" fill="url(#jbLume)" opacity=".8"/>
+ <circle cx="502" cy="615" r="27" fill="url(#jbGold)" stroke="#6c522d" stroke-width="2"/>
+ <circle cx="502" cy="615" r="20" fill="url(#jbLume)" stroke="#9e7737" stroke-width="2"/>
+ <path d="M502 595 V635 M484 607 L518 623 M485 626 L520 604" stroke="#9e824e" stroke-width="4" fill="none"/>
+</g>
+<g id="jbMinuteHand" filter="url(#jbShadow)">
+ <path d="M494 724 L490 650 L497 493 L502 474 L507 493 L514 650 L510 724 Z" fill="url(#jbGold)" stroke="#5b451d" stroke-width="2.2"/>
+ <path d="M499.3 652 L499.3 517 L504.7 517 L504.7 652 Z" fill="url(#jbLume)" opacity=".91"/>
+</g>
+<g id="jbSecondHand" filter="url(#jbShadow)">
+ <path d="M502 772 L502 475" stroke="#705025" stroke-width="3.7"/>
+ <path d="M502 773 L502 476" stroke="#edd397" stroke-width="1.9"/>
+ <circle cx="502" cy="514" r="11" fill="url(#jbGold)" stroke="#87612a" stroke-width="1.5"/>
+ <circle cx="502" cy="514" r="7.1" fill="url(#jbLume)"/>
+</g>
+<circle cx="502" cy="703" r="15" fill="url(#jbGold)" stroke="#6e511e" stroke-width="2"/>
+<circle cx="502" cy="703" r="9.5" fill="#f9efcb" stroke="#81612d" stroke-width="2"/>
+<circle cx="502" cy="703" r="3.7" fill="#98733d"/>
+</svg>
 </div></main>
 <footer>
 <div class="digital" id="digital">--:--:--</div>
@@ -124,6 +191,37 @@ for(const [x,y,w,h] of [[488,464,35,12],[611,574,14,35]]){
  svgNode('rect',{x:x+2.7,y:y+2.3,width:w-5.4,height:h-4.6,rx:1,fill:'url(#lume)'},$('markers'));
 }
 
+
+// Indici e minuti del quadrante vintage senza datario.
+for(let i=0;i<60;i++){
+ const a=i*6, major=(i%5===0);
+ svgNode('line',{x1:502,y1:703-(major?252:257),x2:502,y2:703-(major?263:263),stroke:'#d39c31','stroke-width':major?3.3:1.8,opacity:major?.95:.84,transform:`rotate(${a} 502 703)`},$('jbTicks'));
+}
+for(let h=1;h<=11;h++){
+ const a=h*Math.PI/6, radius=212, x=502+Math.sin(a)*radius, y=703-Math.cos(a)*radius;
+ if(h===3||h===6||h===9){
+  const w=h===6?24:62,he=h===6?71:25;
+  svgNode('rect',{x:x-w/2,y:y-he/2,width:w,height:he,rx:3,fill:'url(#jbGold)',stroke:'#4d3b23','stroke-width':2},$('jbMarkers'));
+  svgNode('rect',{x:x-w/2+4,y:y-he/2+4,width:w-8,height:he-8,rx:2,fill:'url(#jbLume)'},$('jbMarkers'));
+ }else{
+  svgNode('circle',{cx:x,cy:y,r:21,fill:'url(#jbGold)',stroke:'#4e361b','stroke-width':2},$('jbMarkers'));
+  svgNode('circle',{cx:x,cy:y,r:16.5,fill:'url(#jbLume)',stroke:'#a17a34','stroke-width':1.3},$('jbMarkers'));
+ }
+}
+svgNode('path',{d:'M502 469 L473 538 L531 538 Z',fill:'url(#jbGold)',stroke:'#4f391b','stroke-width':2.5},$('jbMarkers'));
+svgNode('path',{d:'M502 476 L481 533 L523 533 Z',fill:'url(#jbLume)'},$('jbMarkers'));
+
+function changeFace(jb){
+ $('watchClassic').hidden=jb;
+ $('watchJB').hidden=!jb;
+ $('jbToggle').setAttribute('aria-pressed',String(jb));
+ $('jbToggle').title=jb?'Torna al Rolex classico':'Mostra il Rolex James Bond';
+ $('subtitle').textContent=jb?'James Bond • Cinturino NATO • Senza datario':'Quadrante animato • Data automatica';
+ try{localStorage.setItem('rolex-live-jb-layout',jb?'1':'0');}catch(e){}
+}
+$('jbToggle').addEventListener('click',()=>changeFace($('jbToggle').getAttribute('aria-pressed')!=='true'));
+try {if(localStorage.getItem('rolex-live-jb-layout')==='1')changeFace(true);}catch(e){}
+
 function frame(){
  const epoch=currentEpoch(), date=new Date(epoch), tz=zone();
  const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',second:'2-digit',day:'2-digit',hourCycle:'h23'}).formatToParts(date).filter(p=>p.type!=='literal').map(p=>[p.type,Number(p.value)]));
@@ -134,6 +232,9 @@ function frame(){
  $('hourHand').setAttribute('transform',`rotate(${hours*30} 618 470)`);
  $('minuteHand').setAttribute('transform',`rotate(${mins*6} 618 470)`);
  $('secondHand').setAttribute('transform',`rotate(${secs*6} 618 470)`);
+ $('jbHourHand').setAttribute('transform',`rotate(${hours*30} 502 703)`);
+ $('jbMinuteHand').setAttribute('transform',`rotate(${mins*6} 502 703)`);
+ $('jbSecondHand').setAttribute('transform',`rotate(${secs*6} 502 703)`);
  $('dayNumber').textContent=parts.day;
  $('digital').textContent=`${String(parts.hour).padStart(2,'0')}:${String(parts.minute).padStart(2,'0')}:${String(parts.second).padStart(2,'0')}`;
  if(!window.lastDayText || window.lastDayText!==`${parts.day}-${parts.hour}-${tz}`){
