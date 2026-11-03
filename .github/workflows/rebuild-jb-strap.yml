@@ -1,0 +1,30 @@
+name: Aggiorna cinturino JB da riferimento fotografico
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rebuild-jb-strap.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout con cronologia
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Installa elaborazione fotografica
+        run: python3 -m pip install --user Pillow numpy scipy
+      - name: Sostituisci solo cinturino JB e aggiorna cache PWA
+        run: python3 scripts/replace_jb_strap_reference.py
+      - name: Verifica e pubblica
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/jb.webp sw.js
+          git diff --cached --stat
+          git diff --cached --quiet && { echo "Nessun aggiornamento prodotto"; exit 1; }
+          git commit -m "Applica cinturino NATO JB originale con fasce oliva e bordi bordeaux"
+          git push origin HEAD:main
