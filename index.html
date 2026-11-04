@@ -42,6 +42,10 @@ select{max-width:185px}
 .watch.jb{aspect-ratio:2 / 3}
 .watch.jb img{object-fit:fill}
 @media(max-height:680px){.title-line{gap:8px}.jb-toggle{min-height:29px}}
+/* L'inserto nero ruota mentre il vetro e le lancette rimangono fermi. */
+.bezel-grip{touch-action:none;cursor:grab;pointer-events:stroke;outline:none}
+.bezel-grip:active{cursor:grabbing}
+.bezel-grip:focus-visible{stroke:#e7c67e;stroke-opacity:.35}
 </style></head><body>
 <header><div class="title-line"><h1>SUBMARINER · LIVE</h1><button id="jbToggle" class="jb-toggle" type="button" aria-pressed="false" aria-label="Attiva o disattiva quadrante James Bond" title="Alterna tra Rolex classico e James Bond">JB</button></div><div class="subtitle" id="subtitle">Quadrante animato • Data automatica</div></header>
 <main><div id="watchClassic" class="watch" aria-label="Orologio analogico Rolex Submariner funzionante">
@@ -54,6 +58,9 @@ select{max-width:185px}
 <linearGradient id="dateLens" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#747581"/><stop offset=".13" stop-color="#e9ebee"/><stop offset=".77" stop-color="#fff"/><stop offset="1" stop-color="#a6a9b2"/></linearGradient>
 <filter id="shadow"><feDropShadow dx="0" dy="1.4" stdDeviation="1.1" flood-color="#000" flood-opacity=".8"/></filter>
 </defs>
+<mask id="bezelMaskClassic" maskUnits="userSpaceOnUse" x="355" y="60" width="545" height="825"><rect x="355" y="60" width="545" height="825" fill="black"/><circle cx="618" cy="470" r="188" stroke="white" stroke-width="47" fill="none"/></mask>
+<g id="bezelRotClassic" mask="url(#bezelMaskClassic)" style="pointer-events:none"><image x="355" y="60" width="545" height="825" href="./assets/rolex.png" preserveAspectRatio="none"/></g>
+
 <!-- Quadrante nuovo sopra le lancette ferme della fotografia -->
 <circle cx="618" cy="470" r="147" fill="url(#dial)"/>
 <circle cx="618" cy="470" r="147" fill="none" stroke="#5e6270" stroke-width=".6" opacity=".68"/>
@@ -96,6 +103,8 @@ select{max-width:185px}
 </g>
 <circle cx="618" cy="470" r="7" fill="url(#steel)" stroke="#525a6a" stroke-width="1.2"/>
 <circle cx="618" cy="470" r="2.1" fill="#a9b1bd"/>
+
+<circle id="bezelGestureClassic" class="bezel-grip" cx="618" cy="470" r="188.5" fill="none" stroke="transparent" stroke-width="47" pointer-events="stroke" tabindex="0" role="slider" aria-label="Ghiera Rolex classico, trascina in senso antiorario, 120 scatti; doppio clic per azzerare" aria-valuemin="0" aria-valuemax="60" aria-valuenow="0"/>
 </svg>
 </div>
 <div id="watchJB" class="watch jb" hidden aria-label="Rolex Submariner James Bond con cinturino NATO e lancette animate">
@@ -114,6 +123,9 @@ select{max-width:185px}
  <radialGradient id="jbLume"><stop stop-color="#f6ecc9"/><stop offset=".8" stop-color="#e6d4a3"/><stop offset="1" stop-color="#c4a46b"/></radialGradient>
  <filter id="jbShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1.2" dy="1.8" stdDeviation="2.3" flood-color="#000" flood-opacity=".8"/></filter>
 </defs>
+<mask id="bezelMaskJB" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1536"><rect x="0" y="0" width="1024" height="1536" fill="black"/><circle cx="502" cy="703" r="347" stroke="white" stroke-width="98" fill="none"/></mask>
+<g id="bezelRotJB" mask="url(#bezelMaskJB)" style="pointer-events:none"><image x="0" y="0" width="1024" height="1536" href="./assets/jb.webp" preserveAspectRatio="none"/></g>
+
 <!-- Tutto il cinturino e la cassa sono nella fotografia; sostituiamo soltanto il quadrante con una base priva di lancette statiche. -->
 <circle cx="502" cy="703" r="267" fill="url(#jbFace)"/>
 <circle cx="502" cy="703" r="267" fill="url(#jbGlow)"/>
@@ -149,6 +161,8 @@ select{max-width:185px}
 <circle cx="502" cy="703" r="15" fill="url(#jbGold)" stroke="#6e511e" stroke-width="2"/>
 <circle cx="502" cy="703" r="9.5" fill="#f9efcb" stroke="#81612d" stroke-width="2"/>
 <circle cx="502" cy="703" r="3.7" fill="#98733d"/>
+
+<circle id="bezelGestureJB" class="bezel-grip" cx="502" cy="703" r="351" fill="none" stroke="transparent" stroke-width="92" pointer-events="stroke" tabindex="0" role="slider" aria-label="Ghiera James Bond d'epoca, trascina liberamente in entrambi i sensi; doppio clic per azzerare" aria-valuemin="0" aria-valuemax="60" aria-valuenow="0"/>
 </svg>
 </div></main>
 <footer>
@@ -202,6 +216,63 @@ for(let h=1;h<=11;h++){
 }
 svgNode('path',{d:'M502 469 L473 538 L531 538 Z',fill:'url(#jbGold)',stroke:'#4f391b','stroke-width':2.5},$('jbMarkers'));
 svgNode('path',{d:'M502 476 L481 533 L523 533 Z',fill:'url(#jbLume)'},$('jbMarkers'));
+
+/* Ghiera Submariner: modello Date 120 click antiorari; modello 6538 vintage a frizione bidirezionale. */
+const bezelModels = {
+ classic:{rot:'bezelRotClassic',grip:'bezelGestureClassic',cx:618,cy:470,step:3,onlyCCW:true,storage:'rolex-bezel-classic-v1',angle:0},
+ jb:{rot:'bezelRotJB',grip:'bezelGestureJB',cx:502,cy:703,step:0,onlyCCW:false,storage:'rolex-bezel-jb-v1',angle:0}
+};
+const mod360=(n)=>((n%360)+360)%360;
+function showBezel(b){
+ b.angle=mod360(b.angle);
+ $(b.rot).setAttribute('transform',`rotate(${b.angle} ${b.cx} ${b.cy})`);
+ const minute=mod360(-b.angle)/6;
+ $(b.grip).setAttribute('aria-valuenow',String(Math.round(minute*2)/2));
+ $(b.grip).setAttribute('aria-valuetext',`${minute.toFixed(1)} minuti`);
+}
+function saveBezel(b){try{localStorage.setItem(b.storage,String(b.angle));}catch(e){}}
+function bezelPointerAngle(ev,b){
+ const svg=$(b.grip).ownerSVGElement,rect=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
+ /* I due viewBox hanno lo stesso rapporto del contenitore fotografico. */
+ const x=vb.x+(ev.clientX-rect.left)*vb.width/rect.width;
+ const y=vb.y+(ev.clientY-rect.top)*vb.height/rect.height;
+ return Math.atan2(y-b.cy,x-b.cx)*180/Math.PI;
+}
+const angleDelta=(a)=>((a+540)%360)-180;
+for(const b of Object.values(bezelModels)){
+ const hit=$(b.grip);
+ try{let x=Number(localStorage.getItem(b.storage));if(Number.isFinite(x))b.angle=x;}catch(e){}
+ if(b.onlyCCW)b.angle=Math.round(b.angle/b.step)*b.step;
+ showBezel(b);
+ let drag=null;
+ hit.addEventListener('pointerdown',ev=>{
+  if(ev.pointerType==='mouse'&&ev.button!==0)return;
+  ev.preventDefault();
+  drag={id:ev.pointerId,last:bezelPointerAngle(ev,b),total:0,start:b.angle};
+  hit.setPointerCapture(ev.pointerId);
+ });
+ hit.addEventListener('pointermove',ev=>{
+  if(!drag||ev.pointerId!==drag.id)return;
+  ev.preventDefault();
+  const theta=bezelPointerAngle(ev,b),delta=angleDelta(theta-drag.last);
+  drag.last=theta;
+  drag.total+=b.onlyCCW?Math.min(delta,0):delta;
+  const d=b.step?(b.onlyCCW?Math.ceil(drag.total/b.step):Math.round(drag.total/b.step))*b.step:drag.total;
+  b.angle=drag.start+d;
+  showBezel(b);
+ });
+ const done=ev=>{if(!drag||ev.pointerId!==drag.id)return;drag=null;saveBezel(b);};
+ hit.addEventListener('pointerup',done);
+ hit.addEventListener('pointercancel',done);
+ hit.addEventListener('lostpointercapture',done);
+ hit.addEventListener('dblclick',ev=>{ev.preventDefault();b.angle=0;showBezel(b);saveBezel(b);});
+ hit.addEventListener('keydown',ev=>{
+  const d=ev.key==='ArrowLeft'?-1:(ev.key==='ArrowRight'&&!b.onlyCCW)?1:0;
+  if(ev.key==='Home'){b.angle=0;showBezel(b);saveBezel(b);ev.preventDefault();return;}
+  if(!d)return;
+  b.angle+=d*(b.step||6);showBezel(b);saveBezel(b);ev.preventDefault();
+ });
+}
 
 function changeFace(jb){
  $('watchClassic').hidden=jb;
