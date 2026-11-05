@@ -12,11 +12,11 @@
 <title>Rolex Live — Orologio sincronizzato</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#090a0f;color:#eef0f4}
-body{min-height:100svh;min-height:100dvh;display:flex;align-items:center;flex-direction:column;justify-content:space-between;overflow-x:hidden}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;min-height:0;background:#090a0f;color:#eef0f4;overflow:hidden;overscroll-behavior:none}
+body{height:100svh;height:100dvh;min-height:0;display:flex;align-items:center;flex-direction:column;justify-content:center;overflow:hidden;overscroll-behavior:none}
 header{padding:18px 12px 5px;text-align:center;flex-shrink:0}header h1{font-size:13px;font-weight:650;letter-spacing:.22em;margin:0;color:#f0f0f4}
 header .subtitle{margin-top:6px;color:#9b9da7;font-size:11px;letter-spacing:.07em}
-main{display:flex;justify-content:center;align-items:flex-end;flex:1;min-height:0;width:100%;overflow:hidden}
+main{display:flex;justify-content:center;align-items:center;flex:0 0 auto;min-height:0;width:100%;overflow:visible}
 .watch{position:relative;width:min(94vw,47dvh,545px);aspect-ratio:545 / 825;isolation:isolate;user-select:none;-webkit-user-select:none;flex-shrink:0}
 .watch img,.watch svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 .watch img{object-fit:fill}.watch svg{overflow:visible}
