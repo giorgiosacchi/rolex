@@ -47,8 +47,19 @@ select{max-width:185px}
 .crown-hit{touch-action:none;cursor:pointer;outline:none}
 .crown-hit:active{cursor:ns-resize}
 .crown-hit:focus-visible{stroke:#f1cf8e;stroke-width:7;stroke-opacity:.8}
-.crown-guide{font-size:11px;color:#c6c0af;line-height:1.5;max-width:420px;margin:2px auto 5px;min-height:32px;text-align:center}
-.crown-guide[hidden]{display:none}
+/* Grips HTML invisibili: indipendenti dal viewBox SVG e raggiungibili anche sul telefono.
+   Non alterano in alcun modo la dimensione o la posizione dell'orologio. */
+.crown-touch{position:absolute;z-index:5;display:block;background:transparent;border:0;outline:none;
+  cursor:ns-resize;touch-action:none;overscroll-behavior:contain;user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent}
+.crown-touch:focus-visible{outline:2px solid rgba(241,207,142,.45);outline-offset:-2px}
+#crownTouchClassic{left:80%;top:40%;width:20%;height:20%}
+#crownTouchJB{left:79%;top:37%;width:21%;height:22%}
+/* A corona estratta si può scorrere su una zona comoda verso l'interno, senza rischiare
+   il gesto di navigazione Android sul bordo destro. */
+#crownTouchClassic.is-adjusting{left:55%;top:33%;width:45%;height:35%}
+#crownTouchJB.is-adjusting{left:55%;top:32%;width:45%;height:36%}
+.crown-gap{height:40px;flex-shrink:0;pointer-events:none}
 /* L'inserto nero ruota mentre il vetro e le lancette rimangono fermi. */
 .bezel-grip{touch-action:none;cursor:grab;pointer-events:stroke;outline:none}
 .bezel-grip:active{cursor:grabbing}
@@ -119,8 +130,9 @@ select{max-width:185px}
  <rect id="crownClassicStem" x="842" y="466" width="5" height="8" rx="1.5" fill="#b4b7bd" stroke="#454a50" stroke-width="1"/>
  <g id="crownClassicShift"><image x="843" y="438" width="45" height="73" href="./assets/crown-classic.png"/></g>
 </g>
-<rect id="crownHitClassic" class="crown-hit" x="755" y="418" width="150" height="115" rx="22" fill="transparent" pointer-events="all" tabindex="0" role="button" aria-label="Corona Rolex classico, doppio clic per estrarre o rientrare, trascina per regolare data e ora"/>
+<rect id="crownHitClassic" class="crown-hit" x="755" y="418" width="150" height="115" rx="22" fill="transparent" pointer-events="none" tabindex="-1" aria-hidden="true" aria-label="Corona Rolex classico, doppio clic per estrarre o rientrare, trascina per regolare data e ora"/>
 </svg>
+<div id="crownTouchClassic" class="crown-touch" tabindex="0" role="button" aria-label="Corona Rolex classico, doppio tocco per passare da riposo a data e ora; trascina verso l'alto o il basso per regolare"></div>
 </div>
 <div id="watchJB" class="watch jb" hidden aria-label="Rolex Submariner James Bond con cinturino NATO e lancette animate">
 <img alt="Rolex Submariner James Bond con cinturino in tessuto rigato nero, oro e rosso" src="./assets/jb.webp"/>
@@ -184,11 +196,12 @@ select{max-width:185px}
  <rect id="crownJBStem" x="882" y="694" width="5" height="13" rx="2" fill="#b5b7b9" stroke="#5e6264" stroke-width="1"/>
  <g id="crownJBShift"><image x="883" y="621" width="100" height="180" href="./assets/crown-jb.png"/></g>
 </g>
-<rect id="crownHitJB" class="crown-hit" x="745" y="595" width="250" height="235" rx="30" fill="transparent" pointer-events="all" tabindex="0" role="button" aria-label="Corona Rolex James Bond, doppio clic per estrarre o rientrare, trascina per regolare l'ora"/>
+<rect id="crownHitJB" class="crown-hit" x="745" y="595" width="250" height="235" rx="30" fill="transparent" pointer-events="none" tabindex="-1" aria-hidden="true" aria-label="Corona Rolex James Bond, doppio clic per estrarre o rientrare, trascina per regolare l'ora"/>
 </svg>
+<div id="crownTouchJB" class="crown-touch" tabindex="0" role="button" aria-label="Corona Rolex James Bond, doppio tocco per regolare l'ora; trascina verso l'alto o il basso"></div>
 </div></main>
 <footer>
-<div id="crownGuide" class="crown-guide" aria-live="polite">Doppio clic sulla corona per la regolazione · trascina in verticale</div>
+<div class="crown-gap" aria-hidden="true"></div>
 <div class="digital" id="digital">--:--:--</div>
 <div class="date-text" id="fullDate">Ora italiana (Roma)</div>
 <div class="status" role="status"><span class="dot" id="dot"></span><span id="status">Ora del dispositivo • connessione in corso…</span></div>
@@ -323,25 +336,24 @@ try {if(localStorage.getItem('rolex-live-jb-layout')==='1')changeFace(true);}cat
 /* Corona fisica: primo scatto = data (moderno) / ora (JB); secondo scatto = ora (moderno).
    Un altro doppio clic riporta in posizione di riposo. Doppio tocco funziona su touch. */
 const crownModels={
- classic:{name:'Rolex classico',hit:'crownHitClassic',cover:'crownClassicCover',shift:'crownClassicShift',stem:'crownClassicStem',steps:['riposo','data','ora'],offsets:[0,10,20],position:0},
- jb:{name:'James Bond',hit:'crownHitJB',cover:'crownJBCover',shift:'crownJBShift',stem:'crownJBStem',steps:['riposo','ora'],offsets:[0,19],position:0}
+ classic:{name:'Rolex classico',hit:'crownHitClassic',touch:'crownTouchClassic',cover:'crownClassicCover',shift:'crownClassicShift',stem:'crownClassicStem',steps:['riposo','data','ora'],offsets:[0,10,20],position:0},
+ jb:{name:'James Bond',hit:'crownHitJB',touch:'crownTouchJB',cover:'crownJBCover',shift:'crownJBShift',stem:'crownJBStem',steps:['riposo','ora'],offsets:[0,19],position:0}
 };
 function activeCrown(){return $('watchJB').hidden?crownModels.classic:crownModels.jb}
 function updateCrownGuide(){
- const c=activeCrown(),mode=c.steps[c.position];
- const next=c.steps[(c.position+1)%c.steps.length];
- $('crownGuide').textContent=mode==='riposo'
-  ?`${c.name} · doppio clic o doppio tocco sulla corona per estrarla`
-  :`${c.name} · regola ${mode==='data'?'la data':'l’ora'} trascinando la corona in verticale (oppure con la rotella); doppio clic → ${next}`;
-}
+  // Nessun testo visibile: le indicazioni restano soltanto negli attributi accessibili.
+  const c=activeCrown();
+ $(c.touch).setAttribute('aria-label',`${c.name}, posizione ${c.steps[c.position]}. Doppio tocco per cambiare posizione; scorrimento verticale per regolare.`);
+ }
 function showCrown(c){
  const dx=c.offsets[c.position];
  $(c.cover).style.display=dx?'':'none';
  $(c.shift).setAttribute('transform',`translate(${dx} 0)`);
  const stem=$(c.stem),x=c.name==='James Bond'?882:842;
  stem.setAttribute('width',String(dx+5));
- $(c.hit).setAttribute('transform',`translate(${dx} 0)`);
- $(c.hit).setAttribute('aria-label',`${c.name}: ${c.steps[c.position]}. Doppio clic per ${c.steps[(c.position+1)%c.steps.length]}, trascina per regolare`);
+  $(c.hit).setAttribute('transform',`translate(${dx} 0)`);
+ $(c.touch).classList.toggle('is-adjusting',c.position!==0);
+ $(c.touch).setAttribute('aria-label',`${c.name}: ${c.steps[c.position]}. Doppio clic o doppio tocco per cambiare posizione, trascina per regolare`);
  updateCrownGuide();
 }
 // Nella posizione di regolazione dell’ora il movimento si ferma (hacking seconds).
@@ -382,57 +394,55 @@ function adjustCrown(c,delta){
  frame();
 }
 for(const c of Object.values(crownModels)){
- const hit=$(c.hit);
- let drag=null,lastTap=0,lastTapX=0,lastTapY=0,lastToggle=0;
- function toggle(){
-  if(performance.now()-lastToggle<80)return;
-  lastToggle=performance.now();advanceCrown(c);
+  const hit=$(c.touch); // Una zona HTML e non un rettangolo SVG fuori dal bordo dell'immagine.
+  let drag=null,lastTap=0,lastTapX=0,lastTapY=0,lastInputType='mouse';
+  const toggle=()=>{lastTap=0;advanceCrown(c);};
+  hit.addEventListener('pointerdown',e=>{
+   if(e.pointerType==='mouse' && e.button!==0)return;
+   e.preventDefault();
+   lastInputType=e.pointerType;
+   drag={id:e.pointerId,lastY:e.clientY,startX:e.clientX,startY:e.clientY,remainder:0,moved:false};
+   try{hit.setPointerCapture(e.pointerId);}catch(err){}
+  });
+  hit.addEventListener('pointermove',e=>{
+   if(!drag || e.pointerId!==drag.id)return;
+   e.preventDefault();
+   const dy=drag.lastY-e.clientY;drag.lastY=e.clientY;
+   if(Math.abs(drag.startY-e.clientY)>5 || Math.abs(drag.startX-e.clientX)>5)drag.moved=true;
+   if(c.position===0 || !drag.moved)return;
+   drag.remainder+=dy;
+   // Soglia più piccola per lo schermo del telefono: un movimento normale è percepito.
+   const stepSize=e.pointerType==='mouse'?14:10;
+   const steps=Math.trunc(drag.remainder/stepSize);
+   if(steps){adjustCrown(c,steps);drag.remainder-=steps*stepSize;}
+  });
+  hit.addEventListener('pointerup',e=>{
+   if(!drag || e.pointerId!==drag.id)return;
+   const moved=drag.moved;
+   drag=null;
+   if(e.pointerType!=='mouse' && !moved){
+    const now=performance.now();
+    if(now-lastTap<500 && Math.hypot(e.clientX-lastTapX,e.clientY-lastTapY)<44){toggle();}
+    else{lastTap=now;lastTapX=e.clientX;lastTapY=e.clientY;}
+   }
+  });
+  hit.addEventListener('pointercancel',()=>{drag=null});
+  hit.addEventListener('lostpointercapture',()=>{drag=null});
+  // Il doppio tocco è gestito esclusivamente dai PointerEvent; dblclick solo per mouse.
+  hit.addEventListener('dblclick',e=>{e.preventDefault();if(lastInputType==='mouse')toggle();});
+  hit.addEventListener('wheel',e=>{
+   if(c.position===0)return;
+   e.preventDefault();
+   const steps=Math.max(-10,Math.min(10,Math.sign(-e.deltaY)*Math.max(1,Math.trunc(Math.abs(e.deltaY)/100))));
+   adjustCrown(c,steps);
+  },{passive:false});
+  hit.addEventListener('keydown',e=>{
+   if(e.key==='Enter' || e.key===' '){e.preventDefault();advanceCrown(c);}
+   if(e.key==='ArrowUp' || e.key==='ArrowRight'){e.preventDefault();adjustCrown(c,1);}
+   if(e.key==='ArrowDown' || e.key==='ArrowLeft'){e.preventDefault();adjustCrown(c,-1);}
+  });
+  showCrown(c);
  }
- hit.addEventListener('pointerdown',e=>{
-  if(e.pointerType==='mouse' && e.button!==0)return;
-  e.preventDefault();
-  drag={id:e.pointerId,lastY:e.clientY,startX:e.clientX,startY:e.clientY,remainder:0,moved:false};
-  hit.setPointerCapture(e.pointerId);
- });
- hit.addEventListener('pointermove',e=>{
-  if(!drag || e.pointerId!==drag.id)return;
-  e.preventDefault();
-  const dy=drag.lastY-e.clientY;drag.lastY=e.clientY;
-  if(Math.abs(drag.startY-e.clientY)>7 || Math.abs(drag.startX-e.clientX)>7)drag.moved=true;
-  if(c.position===0 || !drag.moved)return;
-  drag.remainder+=dy;
-  const stepSize=16; // circa 16 pixel = 1 giorno o 1 minuto
-  const steps=Math.trunc(drag.remainder/stepSize);
-  if(steps){adjustCrown(c,steps);drag.remainder-=steps*stepSize;}
- });
- hit.addEventListener('pointerup',e=>{
-  if(!drag || e.pointerId!==drag.id)return;
-  const moved=drag.moved;
-  drag=null;
-  if(e.pointerType!=='mouse' && !moved){
-   const now=performance.now();
-   if(now-lastTap<440 && Math.hypot(e.clientX-lastTapX,e.clientY-lastTapY)<26){
-    lastTap=0;toggle();
-   }else{lastTap=now;lastTapX=e.clientX;lastTapY=e.clientY;}
-  }
- });
- hit.addEventListener('pointercancel',()=>{drag=null});
- hit.addEventListener('lostpointercapture',()=>{drag=null});
- hit.addEventListener('dblclick',e=>{e.preventDefault();toggle();});
- hit.addEventListener('click',e=>{if(e.detail>=2){e.preventDefault();toggle();}});
- hit.addEventListener('wheel',e=>{
-  if(c.position===0)return;
-  e.preventDefault();
-  const steps=Math.max(-10,Math.min(10,Math.sign(-e.deltaY)*Math.max(1,Math.trunc(Math.abs(e.deltaY)/100))));
-  adjustCrown(c,steps);
- },{passive:false});
- hit.addEventListener('keydown',e=>{
-  if(e.key==='Enter' || e.key===' '){e.preventDefault();advanceCrown(c);}
-  if(e.key==='ArrowUp' || e.key==='ArrowRight'){e.preventDefault();adjustCrown(c,1);}
-  if(e.key==='ArrowDown' || e.key==='ArrowLeft'){e.preventDefault();adjustCrown(c,-1);}
- });
- showCrown(c);
-}
 window.__crownInitialized=true;updateCrownGuide();
 function clearManualAfterSuccessfulSync(){
  manualOffsetMs=0;manualDayShift=0;manualActive=false;manualRevision++;
