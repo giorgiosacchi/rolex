@@ -42,6 +42,13 @@ select{max-width:185px}
 .watch.jb{aspect-ratio:2 / 3}
 .watch.jb img{object-fit:fill}
 @media(max-height:680px){.title-line{gap:8px}.jb-toggle{min-height:29px}}
+
+/* Corona: il doppio clic/tocco alterna gli scatti; lo sfregamento verticale regola. */
+.crown-hit{touch-action:none;cursor:pointer;outline:none}
+.crown-hit:active{cursor:ns-resize}
+.crown-hit:focus-visible{stroke:#f1cf8e;stroke-width:7;stroke-opacity:.8}
+.crown-guide{font-size:11px;color:#c6c0af;line-height:1.5;max-width:420px;margin:2px auto 5px;min-height:32px;text-align:center}
+.crown-guide[hidden]{display:none}
 /* L'inserto nero ruota mentre il vetro e le lancette rimangono fermi. */
 .bezel-grip{touch-action:none;cursor:grab;pointer-events:stroke;outline:none}
 .bezel-grip:active{cursor:grabbing}
@@ -58,7 +65,8 @@ select{max-width:185px}
 <linearGradient id="dateLens" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#747581"/><stop offset=".13" stop-color="#e9ebee"/><stop offset=".77" stop-color="#fff"/><stop offset="1" stop-color="#a6a9b2"/></linearGradient>
 <filter id="shadow"><feDropShadow dx="0" dy="1.4" stdDeviation="1.1" flood-color="#000" flood-opacity=".8"/></filter>
 </defs>
-<mask id="bezelMaskClassic" maskUnits="userSpaceOnUse" x="355" y="60" width="545" height="825"><rect x="355" y="60" width="545" height="825" fill="black"/><circle cx="618" cy="470" r="188" stroke="white" stroke-width="47" fill="none"/></mask>
+<!-- Ghiera fotografica separata: originale inalterato quando la rotazione è zero. -->
+<mask id="bezelMaskClassic" maskUnits="userSpaceOnUse" x="355" y="60" width="545" height="825"><rect x="355" y="60" width="545" height="825" fill="black"/><circle cx="618" cy="470" r="188" stroke="white" stroke-width="41" fill="none"/></mask>
 <g id="bezelRotClassic" mask="url(#bezelMaskClassic)" style="pointer-events:none"><image x="355" y="60" width="545" height="825" href="./assets/rolex.png" preserveAspectRatio="none"/></g>
 
 <!-- Quadrante nuovo sopra le lancette ferme della fotografia -->
@@ -104,7 +112,14 @@ select{max-width:185px}
 <circle cx="618" cy="470" r="7" fill="url(#steel)" stroke="#525a6a" stroke-width="1.2"/>
 <circle cx="618" cy="470" r="2.1" fill="#a9b1bd"/>
 
+<!-- Zona invisibile di trascinamento: solo sulla fascia della ghiera. -->
 <circle id="bezelGestureClassic" class="bezel-grip" cx="618" cy="470" r="188.5" fill="none" stroke="transparent" stroke-width="47" pointer-events="stroke" tabindex="0" role="slider" aria-label="Ghiera Rolex classico, trascina in senso antiorario, 120 scatti; doppio clic per azzerare" aria-valuemin="0" aria-valuemax="60" aria-valuenow="0"/>
+<g id="crownClassicCover" style="display:none;pointer-events:none">
+ <image x="838" y="433" width="58" height="84" href="./assets/crown-back-classic.png"/>
+ <rect id="crownClassicStem" x="842" y="466" width="5" height="8" rx="1.5" fill="#b4b7bd" stroke="#454a50" stroke-width="1"/>
+ <g id="crownClassicShift"><image x="843" y="438" width="45" height="73" href="./assets/crown-classic.png"/></g>
+</g>
+<rect id="crownHitClassic" class="crown-hit" x="840" y="435" width="64" height="79" rx="12" fill="transparent" pointer-events="all" tabindex="0" role="button" aria-label="Corona Rolex classico, doppio clic per estrarre o rientrare, trascina per regolare data e ora"/>
 </svg>
 </div>
 <div id="watchJB" class="watch jb" hidden aria-label="Rolex Submariner James Bond con cinturino NATO e lancette animate">
@@ -123,7 +138,8 @@ select{max-width:185px}
  <radialGradient id="jbLume"><stop stop-color="#f6ecc9"/><stop offset=".8" stop-color="#e6d4a3"/><stop offset="1" stop-color="#c4a46b"/></radialGradient>
  <filter id="jbShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1.2" dy="1.8" stdDeviation="2.3" flood-color="#000" flood-opacity=".8"/></filter>
 </defs>
-<mask id="bezelMaskJB" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1536"><rect x="0" y="0" width="1024" height="1536" fill="black"/><circle cx="502" cy="703" r="347" stroke="white" stroke-width="98" fill="none"/></mask>
+<!-- Inserto fotografico originale, con rotazione indipendente dal quadrante. -->
+<mask id="bezelMaskJB" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1536"><rect x="0" y="0" width="1024" height="1536" fill="black"/><circle cx="502" cy="703" r="347" stroke="white" stroke-width="80" fill="none"/></mask>
 <g id="bezelRotJB" mask="url(#bezelMaskJB)" style="pointer-events:none"><image x="0" y="0" width="1024" height="1536" href="./assets/jb.webp" preserveAspectRatio="none"/></g>
 
 <!-- Tutto il cinturino e la cassa sono nella fotografia; sostituiamo soltanto il quadrante con una base priva di lancette statiche. -->
@@ -163,9 +179,16 @@ select{max-width:185px}
 <circle cx="502" cy="703" r="3.7" fill="#98733d"/>
 
 <circle id="bezelGestureJB" class="bezel-grip" cx="502" cy="703" r="351" fill="none" stroke="transparent" stroke-width="92" pointer-events="stroke" tabindex="0" role="slider" aria-label="Ghiera James Bond d'epoca, trascina liberamente in entrambi i sensi; doppio clic per azzerare" aria-valuemin="0" aria-valuemax="60" aria-valuenow="0"/>
+<g id="crownJBCover" style="display:none;pointer-events:none">
+ <image x="878" y="616" width="113" height="191" href="./assets/crown-back-jb.png"/>
+ <rect id="crownJBStem" x="882" y="694" width="5" height="13" rx="2" fill="#b5b7b9" stroke="#5e6264" stroke-width="1"/>
+ <g id="crownJBShift"><image x="883" y="621" width="100" height="180" href="./assets/crown-jb.png"/></g>
+</g>
+<rect id="crownHitJB" class="crown-hit" x="878" y="628" width="115" height="174" rx="22" fill="transparent" pointer-events="all" tabindex="0" role="button" aria-label="Corona Rolex James Bond, doppio clic per estrarre o rientrare, trascina per regolare l'ora"/>
 </svg>
 </div></main>
 <footer>
+<div id="crownGuide" class="crown-guide" aria-live="polite">Doppio clic sulla corona per la regolazione · trascina in verticale</div>
 <div class="digital" id="digital">--:--:--</div>
 <div class="date-text" id="fullDate">Ora italiana (Roma)</div>
 <div class="status" role="status"><span class="dot" id="dot"></span><span id="status">Ora del dispositivo • connessione in corso…</span></div>
@@ -176,6 +199,15 @@ select{max-width:185px}
 const $ = id => document.getElementById(id);
 const NS = 'http://www.w3.org/2000/svg';
 let baseEpoch = Date.now(), basePerf = performance.now(), synced = false;
+const MANUAL_KEY = 'rolex-crown-regolazioni-v1';
+let manualOffsetMs=0, manualDayShift=0, manualActive=false, manualRevision=0;
+try{
+ const saved=JSON.parse(localStorage.getItem(MANUAL_KEY)||'null');
+ if(saved?.active && Number.isFinite(saved.epochAtSave) && Number.isFinite(saved.wallAtSave) && Number.isFinite(saved.dayShift)){
+  manualActive=true; manualDayShift=saved.dayShift;
+  manualOffsetMs=saved.epochAtSave+(Date.now()-saved.wallAtSave)-Date.now();
+ }
+}catch(err){console.warn('Preferenze manuali non disponibili',err)}
 const angleAt = (hour) => hour * 30;
 function currentEpoch(){return baseEpoch + (performance.now() - basePerf);}
 function zone(){return $('zone').value==='local' ? (Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Rome') : $('zone').value;}
@@ -216,6 +248,7 @@ for(let h=1;h<=11;h++){
 }
 svgNode('path',{d:'M502 469 L473 538 L531 538 Z',fill:'url(#jbGold)',stroke:'#4f391b','stroke-width':2.5},$('jbMarkers'));
 svgNode('path',{d:'M502 476 L481 533 L523 533 Z',fill:'url(#jbLume)'},$('jbMarkers'));
+
 
 /* Ghiera Submariner: modello Date 120 click antiorari; modello 6538 vintage a frizione bidirezionale. */
 const bezelModels = {
@@ -280,14 +313,143 @@ function changeFace(jb){
  $('jbToggle').setAttribute('aria-pressed',String(jb));
  $('jbToggle').title=jb?'Torna al Rolex classico':'Mostra il Rolex James Bond';
  $('subtitle').textContent=jb?'James Bond • Cinturino NATO • Senza datario':'Quadrante animato • Data automatica';
+ if(window.__crownInitialized)updateCrownGuide();
  try{localStorage.setItem('rolex-live-jb-layout',jb?'1':'0');}catch(e){}
 }
 $('jbToggle').addEventListener('click',()=>changeFace($('jbToggle').getAttribute('aria-pressed')!=='true'));
 try {if(localStorage.getItem('rolex-live-jb-layout')==='1')changeFace(true);}catch(e){}
 
+
+/* Corona fisica: primo scatto = data (moderno) / ora (JB); secondo scatto = ora (moderno).
+   Un altro doppio clic riporta in posizione di riposo. Doppio tocco funziona su touch. */
+const crownModels={
+ classic:{name:'Rolex classico',hit:'crownHitClassic',cover:'crownClassicCover',shift:'crownClassicShift',stem:'crownClassicStem',steps:['riposo','data','ora'],offsets:[0,10,20],position:0},
+ jb:{name:'James Bond',hit:'crownHitJB',cover:'crownJBCover',shift:'crownJBShift',stem:'crownJBStem',steps:['riposo','ora'],offsets:[0,19],position:0}
+};
+function activeCrown(){return $('watchJB').hidden?crownModels.classic:crownModels.jb}
+function updateCrownGuide(){
+ const c=activeCrown(),mode=c.steps[c.position];
+ const next=c.steps[(c.position+1)%c.steps.length];
+ $('crownGuide').textContent=mode==='riposo'
+  ?`${c.name} · doppio clic o doppio tocco sulla corona per estrarla`
+  :`${c.name} · regola ${mode==='data'?'la data':'l’ora'} trascinando la corona in verticale (oppure con la rotella); doppio clic → ${next}`;
+}
+function showCrown(c){
+ const dx=c.offsets[c.position];
+ $(c.cover).style.display=dx?'':'none';
+ $(c.shift).setAttribute('transform',`translate(${dx} 0)`);
+ const stem=$(c.stem),x=c.name==='James Bond'?882:842;
+ stem.setAttribute('width',String(dx+5));
+ $(c.hit).setAttribute('transform',`translate(${dx} 0)`);
+ $(c.hit).setAttribute('aria-label',`${c.name}: ${c.steps[c.position]}. Doppio clic per ${c.steps[(c.position+1)%c.steps.length]}, trascina per regolare`);
+ updateCrownGuide();
+}
+// Nella posizione di regolazione dell’ora il movimento si ferma (hacking seconds).
+// Al rientro recuperiamo il tempo di arresto, così riparte dal secondo esatto in cui si è fermato.
+function advanceCrown(c){
+ const wasTimeSetting=c.steps[c.position]==='ora';
+ if(wasTimeSetting && Number.isFinite(c.hackStartPerf)){
+  manualOffsetMs-=performance.now()-c.hackStartPerf;
+  c.hackStartPerf=null;c.hackAnchorEpoch=null;c.hackOffsetStart=null;
+  persistManual(); // memorizza anche il tempo trascorso con la corona estratta
+ }
+ c.position=(c.position+1)%c.steps.length;
+ if(c.steps[c.position]==='ora'){
+  c.hackStartPerf=performance.now();
+  c.hackAnchorEpoch=currentEpoch()+manualOffsetMs;
+  c.hackOffsetStart=manualOffsetMs;
+  manualRevision++; // impedisce a una sincronizzazione automatica già avviata di intervenire
+ }
+ showCrown(c);
+ frame();
+}
+function displayEpochFor(c){
+ return c.steps[c.position]==='ora' && Number.isFinite(c.hackAnchorEpoch)
+  ?c.hackAnchorEpoch+(manualOffsetMs-c.hackOffsetStart)
+  :currentEpoch()+manualOffsetMs;
+}
+function persistManual(){
+ manualActive=true; manualRevision+=1;
+ try{localStorage.setItem(MANUAL_KEY,JSON.stringify({active:true,epochAtSave:currentEpoch()+manualOffsetMs,wallAtSave:Date.now(),dayShift:manualDayShift}));}catch(e){}
+}
+function adjustCrown(c,delta){
+ if(!delta || c.position===0)return;
+ if(c.steps[c.position]==='data')manualDayShift+=delta;
+ else manualOffsetMs+=delta*60*1000;
+ persistManual();
+ window.lastDayText='';
+ status('Regolazione manuale · mantenuta fino a Sincronizza ora',false);
+ frame();
+}
+for(const c of Object.values(crownModels)){
+ const hit=$(c.hit);
+ let drag=null,lastTap=0,lastTapX=0,lastTapY=0,lastToggle=0;
+ function toggle(){
+  if(performance.now()-lastToggle<80)return;
+  lastToggle=performance.now();advanceCrown(c);
+ }
+ hit.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='mouse' && e.button!==0)return;
+  e.preventDefault();
+  drag={id:e.pointerId,lastY:e.clientY,startX:e.clientX,startY:e.clientY,remainder:0,moved:false};
+  hit.setPointerCapture(e.pointerId);
+ });
+ hit.addEventListener('pointermove',e=>{
+  if(!drag || e.pointerId!==drag.id)return;
+  e.preventDefault();
+  const dy=drag.lastY-e.clientY;drag.lastY=e.clientY;
+  if(Math.abs(drag.startY-e.clientY)>7 || Math.abs(drag.startX-e.clientX)>7)drag.moved=true;
+  if(c.position===0 || !drag.moved)return;
+  drag.remainder+=dy;
+  const stepSize=16; // circa 16 pixel = 1 giorno o 1 minuto
+  const steps=Math.trunc(drag.remainder/stepSize);
+  if(steps){adjustCrown(c,steps);drag.remainder-=steps*stepSize;}
+ });
+ hit.addEventListener('pointerup',e=>{
+  if(!drag || e.pointerId!==drag.id)return;
+  const moved=drag.moved;
+  drag=null;
+  if(e.pointerType!=='mouse' && !moved){
+   const now=performance.now();
+   if(now-lastTap<440 && Math.hypot(e.clientX-lastTapX,e.clientY-lastTapY)<26){
+    lastTap=0;toggle();
+   }else{lastTap=now;lastTapX=e.clientX;lastTapY=e.clientY;}
+  }
+ });
+ hit.addEventListener('pointercancel',()=>{drag=null});
+ hit.addEventListener('lostpointercapture',()=>{drag=null});
+ hit.addEventListener('dblclick',e=>{e.preventDefault();toggle();});
+ hit.addEventListener('click',e=>{if(e.detail>=2){e.preventDefault();toggle();}});
+ hit.addEventListener('wheel',e=>{
+  if(c.position===0)return;
+  e.preventDefault();
+  const steps=Math.max(-10,Math.min(10,Math.sign(-e.deltaY)*Math.max(1,Math.trunc(Math.abs(e.deltaY)/100))));
+  adjustCrown(c,steps);
+ },{passive:false});
+ hit.addEventListener('keydown',e=>{
+  if(e.key==='Enter' || e.key===' '){e.preventDefault();advanceCrown(c);}
+  if(e.key==='ArrowUp' || e.key==='ArrowRight'){e.preventDefault();adjustCrown(c,1);}
+  if(e.key==='ArrowDown' || e.key==='ArrowLeft'){e.preventDefault();adjustCrown(c,-1);}
+ });
+ showCrown(c);
+}
+window.__crownInitialized=true;updateCrownGuide();
+function clearManualAfterSuccessfulSync(){
+ manualOffsetMs=0;manualDayShift=0;manualActive=false;manualRevision++;
+ try{localStorage.removeItem(MANUAL_KEY);}catch(e){}
+ for(const c of Object.values(crownModels)){
+  c.position=0;
+  c.hackStartPerf=null;c.hackAnchorEpoch=null;c.hackOffsetStart=null;
+  showCrown(c);
+ }
+ window.lastDayText='';
+}
+
 function frame(){
- const epoch=currentEpoch(), date=new Date(epoch), tz=zone();
- const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',second:'2-digit',day:'2-digit',hourCycle:'h23'}).formatToParts(date).filter(p=>p.type!=='literal').map(p=>[p.type,Number(p.value)]));
+ // Durante la regolazione dell’ora si arresta l’avanzamento del movimento;
+ // la data (primo scatto del moderno) non arresta i secondi.
+ const epoch=displayEpochFor(activeCrown()), date=new Date(epoch), tz=zone();
+ const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',second:'2-digit',year:'numeric',month:'2-digit',day:'2-digit',hourCycle:'h23'}).formatToParts(date).filter(p=>p.type!=='literal').map(p=>[p.type,Number(p.value)]));
  const ms=((epoch%1000)+1000)%1000;
  const hours=(parts.hour%12)+parts.minute/60+(parts.second+ms/1000)/3600;
  const mins=parts.minute+(parts.second+ms/1000)/60;
@@ -298,13 +460,15 @@ function frame(){
  $('jbHourHand').setAttribute('transform',`rotate(${hours*30} 502 703)`);
  $('jbMinuteHand').setAttribute('transform',`rotate(${mins*6} 502 703)`);
  $('jbSecondHand').setAttribute('transform',`rotate(${secs*6} 502 703)`);
- $('dayNumber').textContent=parts.day;
+ // Date adjustment is calendar-day based: never change the hands when advancing the date.
+ const displayDate=new Date(Date.UTC(parts.year,parts.month-1,parts.day+manualDayShift,12));
+ $('dayNumber').textContent=String(displayDate.getUTCDate()).padStart(2,'0');
  $('digital').textContent=`${String(parts.hour).padStart(2,'0')}:${String(parts.minute).padStart(2,'0')}:${String(parts.second).padStart(2,'0')}`;
- if(!window.lastDayText || window.lastDayText!==`${parts.day}-${parts.hour}-${tz}`){
-  $('fullDate').textContent=new Intl.DateTimeFormat('it-IT',{timeZone:tz,weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(date);
-  window.lastDayText=`${parts.day}-${parts.hour}-${tz}`;
+ const dateKey=`${displayDate.toISOString().slice(0,10)}-${tz}`;
+ if(window.lastDayText!==dateKey){
+  $('fullDate').textContent=new Intl.DateTimeFormat('it-IT',{timeZone:'UTC',weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(displayDate);
+  window.lastDayText=dateKey;
  }
-
 }
 function status(message,ok){$('status').textContent=message;$('dot').classList.toggle('ok',ok);}
 async function fetchWithTimeout(url){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),6500);try{
@@ -312,29 +476,40 @@ async function fetchWithTimeout(url){const controller=new AbortController();cons
  if(!res.ok)throw Error(`HTTP ${res.status}`);
  return {data:await res.json(), midpoint:(start+end)/2};
 }finally{clearTimeout(timeout);}}
-async function synchronize(){
- const btn=$('syncBtn');btn.disabled=true;status('Sincronizzazione con Internet…',false);
+async function synchronize({automatic=false}={}){
+ if(automatic && (manualActive || Object.values(crownModels).some(c=>c.steps[c.position]==='ora')))return;
+ const revisionAtStart=manualRevision;
+ const btn=$('syncBtn');btn.disabled=true;
+ status('Sincronizzazione con Internet…',false);
  const providers=[
   {url:'https://timeapi.io/api/Time/current/zone?timeZone=UTC',parse:d=>Date.UTC(d.year,d.month-1,d.day,d.hour,d.minute,d.seconds||0,d.milliSeconds||0)},
   {url:'https://worldtime.timezone.io/api/timezone/Etc/UTC',parse:d=>Date.parse(d.utc_datetime||d.datetime)}
  ];
- let err=null;
  for(const p of providers){try{
   const {data,midpoint}=await fetchWithTimeout(p.url);
   const epoch=p.parse(data);if(!Number.isFinite(epoch))throw Error('Data non valida');
+  // Never discard a manual adjustment if it was made while the request was in flight.
+  if(automatic && (manualActive || revisionAtStart!==manualRevision || Object.values(crownModels).some(c=>c.steps[c.position]==='ora'))){
+   status('Regolazione manuale conservata',false);btn.disabled=false;return;
+  }
   baseEpoch=epoch;basePerf=midpoint;synced=true;
+  if(!automatic)clearManualAfterSuccessfulSync();
   status('Sincronizzato con ora Internet',true);btn.disabled=false;return;
- }catch(e){err=e;}}
- // For offline use, fall back to device system clock.
- if(!synced){baseEpoch=Date.now();basePerf=performance.now();}
- status(synced?'Rete assente · mantiene ultima sincronizzazione':'Rete non disponibile · ora del dispositivo',false);btn.disabled=false;
+ }catch(e){console.warn('Servizio ora non disponibile:',p.url,e)}}
+ if(!synced && !manualActive){baseEpoch=Date.now();basePerf=performance.now();}
+ status(manualActive?'Rete non disponibile · regolazioni manuali conservate':
+        synced?'Rete assente · mantiene ultima sincronizzazione':'Rete non disponibile · ora del dispositivo',false);
+ btn.disabled=false;
 }
-$('syncBtn').addEventListener('click',synchronize);
-$('zone').addEventListener('change',()=>{window.lastDayText='';status(synced?'Sincronizzato con ora Internet':'Ora del dispositivo',synced);});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden && navigator.onLine) synchronize();});
-window.addEventListener('online',synchronize);
-frame();setInterval(frame,50);synchronize();
-setInterval(()=>{if(navigator.onLine)synchronize();},30*60*1000);
+$('syncBtn').addEventListener('click',()=>synchronize({automatic:false}));
+$('zone').addEventListener('change',()=>{window.lastDayText='';status(manualActive?'Regolazione manuale conservata':synced?'Sincronizzato con ora Internet':'Ora del dispositivo',synced&&!manualActive);});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden && navigator.onLine && !manualActive)synchronize({automatic:true});});
+window.addEventListener('online',()=>{if(!manualActive)synchronize({automatic:true});});
+frame();setInterval(frame,50);
+if(manualActive)status('Regolazione manuale ripristinata · premi Sincronizza ora per azzerarla',false);
+else synchronize({automatic:true});
+setInterval(()=>{if(navigator.onLine&&!manualActive)synchronize({automatic:true});},30*60*1000);
+
 
 // PWA: unique manifest identity, independently installable from other projects.
 let pendingInstall = null;

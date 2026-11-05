@@ -1,7 +1,7 @@
 // Rolex Live · classical and JB edition
 'use strict';
-const CACHE='rolex-live-dual-jb-v7';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./assets/rolex.png','./assets/jb.webp','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png','./icons/apple-touch-icon.png'];
+const CACHE='rolex-live-dual-jb-v8';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./assets/rolex.png','./assets/jb.webp','./assets/crown-classic.png','./assets/crown-back-classic.png','./assets/crown-jb.png','./assets/crown-back-jb.png','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png','./icons/apple-touch-icon.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([
   caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('rolex-live-')&&key!==CACHE).map(key=>caches.delete(key)))),
